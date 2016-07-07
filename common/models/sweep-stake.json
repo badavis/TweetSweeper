@@ -1,0 +1,23 @@
+{
+  "name": "sweepStake",
+  "plural": "sweepStakes",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "twitterAccount": {
+      "type": "string",
+      "required": true
+    },
+    "tweet": {
+      "type": "object",
+      "required": true
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {}
+}
