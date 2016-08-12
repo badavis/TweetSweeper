@@ -17,12 +17,27 @@ module.exports = function(Sweepstake) {
     });
   };
 
+  retweet = (id_str) => {
+    client.post('statuses/retweet/' + id_str, (error, tweet, response) => {
+      if(!error) {
+        console.log('We did a Tweet', tweet + '\n' + response);
+      }
+    });
+  };
+
+  stepTwo = () => {
+
+  };
+
   Sweepstake.streamSweepStakes = function(cb) {
     var stream = client.stream('statuses/filter', {track: 'retweet to win'});
     stream.on('data', function(tweet) {
       if(tweet.hasOwnProperty('retweeted_status')) return 'Nope';
       console.log('\n\nNew Tweet From: ', tweet.user.screen_name + '\n' + tweet.text);
       console.log('\nDate', tweet.created_at);
+
+      retweet(tweet.id_str);
+      stepTwo();
     });
 
     stream.on('error', function(error) {
