@@ -7,7 +7,7 @@ A Twitter Bot For Subscribing to Sweepstakes
 - [x] Connect to tweet stream
 - [x] Filter incoming tweets that include string 'Retweet to win'
 - [x] Ignore retweets with matching query
-- [ ] Ignore tweets that contain a tweet that matches query
+- [x] Ignore tweets that contain a tweet that matches query
 - [ ] Ignore tweets with nsfw content
 - [ ] Throttle retweeting
 - [ ] Save sweepstakes tweets in db
