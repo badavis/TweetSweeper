@@ -20,7 +20,7 @@ module.exports = function(Sweepstake) {
   retweet = (id_str) => {
     client.post('statuses/retweet/' + id_str, (error, tweet, response) => {
       if(!error) {
-        console.log('We did a Tweet', tweet + '\n' + response);
+        console.log('We did a Tweet', JSON.stringify(tweet) + '\n' + response);
       }
     });
   };
@@ -32,7 +32,7 @@ module.exports = function(Sweepstake) {
   Sweepstake.streamSweepStakes = function(cb) {
     var stream = client.stream('statuses/filter', {track: 'retweet to win'});
     stream.on('data', function(tweet) {
-      if(tweet.hasOwnProperty('retweeted_status') || tweet.hasOwnProperty('quoted_status')) return 'Nope';
+      if(tweet.hasOwnProperty('retweeted_status') || tweet.hasOwnProperty('quoted_status') || (tweet.hasOwnProperty('possibly_sensitive') && tweet.possibly_sensitive === true)) return 'Nope';
       console.log('\n\nNew Tweet From: ', tweet.user.screen_name + '\n' + tweet.text);
       console.log('\nDate', tweet.created_at);
 
