@@ -8,8 +8,8 @@ A Twitter Bot For Subscribing to Sweepstakes
 - [x] Filter incoming tweets that include string 'Retweet to win'
 - [x] Ignore retweets with matching query
 - [x] Ignore tweets that contain a tweet that matches query
-- [ ] Ignore tweets with nsfw content
-- [ ] Throttle retweeting
+- [x] Ignore tweets with nsfw content
+- [x] Throttle retweeting
 - [ ] Save sweepstakes tweets in db
 - [ ] Refine search query
 - [ ] Follow accounts that post sweepstakes

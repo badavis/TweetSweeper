@@ -1,4 +1,7 @@
 var Twitter = require('twitter');
+var badwordList = require('badwords-list');
+var _ = require('lodash');
+
 let client = new Twitter({
   consumer_key: process.env.TWITTER_CONSUMER_KEY,
   consumer_secret: process.env.TWITTER_CONSUMER_SECRET,
@@ -17,12 +20,18 @@ module.exports = function(Sweepstake) {
     });
   };
 
-  retweet = (id_str) => {
+  retweet = (id_str, lastRetweetTimestamp) => {
+    if(Date.now() - lastRetweetTimestamp < 10000) {
+      console.log('Taking a timeout', Date.now() - lastRetweetTimestamp);
+      return lastRetweetTimestamp;
+    }
     client.post('statuses/retweet/' + id_str, (error, tweet, response) => {
       if(!error) {
-        console.log('We did a Tweet', JSON.stringify(tweet) + '\n' + response);
+        console.log('We did a Tweet: ', JSON.stringify(tweet) + '\n' + response);
       }
     });
+
+    return Date.now();
   };
 
   stepTwo = () => {
@@ -31,12 +40,22 @@ module.exports = function(Sweepstake) {
 
   Sweepstake.streamSweepStakes = function(cb) {
     var stream = client.stream('statuses/filter', {track: 'retweet to win'});
-    stream.on('data', function(tweet) {
-      if(tweet.hasOwnProperty('retweeted_status') || tweet.hasOwnProperty('quoted_status') || (tweet.hasOwnProperty('possibly_sensitive') && tweet.possibly_sensitive === true)) return 'Nope';
-      console.log('\n\nNew Tweet From: ', tweet.user.screen_name + '\n' + tweet.text);
-      console.log('\nDate', tweet.created_at);
+    var lastRetweetTimestamp = Date.now();
 
-      retweet(tweet.id_str);
+    stream.on('data', (tweet) => {
+      if(tweet.hasOwnProperty('retweeted_status') || tweet.hasOwnProperty('quoted_status') || (tweet.hasOwnProperty('possibly_sensitive') && tweet.possibly_sensitive === true)) {
+        console.log('Nope');
+        return 'Nope';
+      }
+      // console.log('\n\nNew Tweet From: ', tweet.user.screen_name + '\n' + tweet.text);
+      // console.log('\nDate', tweet.created_at);
+
+      if(tweet.text.toLowerCase().search(badwordList.regex) !== -1) {
+        console.log('Fugetaboutit', tweet.text);
+        return 'Badword Alert!';
+      }
+
+      lastRetweetTimestamp = retweet(tweet.id_str, lastRetweetTimestamp);
       stepTwo();
     });
 
