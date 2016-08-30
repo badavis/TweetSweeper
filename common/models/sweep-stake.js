@@ -34,8 +34,12 @@ module.exports = function(Sweepstake) {
     return Date.now();
   };
 
-  stepTwo = () => {
-
+  saveTweet = (tweet) => {
+    const sweepstakeData = {
+      twitterAccount: tweet.user.screen_name,
+      tweet: tweet
+    };
+    Sweepstake.create(sweepstakeData);
   };
 
   Sweepstake.streamSweepStakes = function(cb) {
@@ -56,7 +60,7 @@ module.exports = function(Sweepstake) {
       }
 
       lastRetweetTimestamp = retweet(tweet.id_str, lastRetweetTimestamp);
-      stepTwo();
+      saveTweet(tweet);
     });
 
     stream.on('error', function(error) {

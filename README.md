@@ -10,7 +10,7 @@ A Twitter Bot For Subscribing to Sweepstakes
 - [x] Ignore tweets that contain a tweet that matches query
 - [x] Ignore tweets with nsfw content
 - [x] Throttle retweeting
-- [ ] Save sweepstakes tweets in db
+- [x] Save sweepstakes tweets in db
 - [ ] Refine search query
 - [ ] Follow accounts that post sweepstakes
 - [ ] Frontend displaying analytics
