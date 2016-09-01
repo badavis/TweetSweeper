@@ -20,19 +20,32 @@ module.exports = function(Sweepstake) {
     });
   };
 
-  retweet = (id_str, lastRetweetTimestamp) => {
+  throttle = (lastRetweetTimestamp) => {
     if(Date.now() - lastRetweetTimestamp < 10000) {
       console.log('Taking a timeout', Date.now() - lastRetweetTimestamp);
       return lastRetweetTimestamp;
     }
+  }
+
+  retweet = (id_str) => {
     client.post('statuses/retweet/' + id_str, (error, tweet, response) => {
-      if(!error) {
-        console.log('We did a Tweet: ', JSON.stringify(tweet) + '\n' + response);
+      if(error) {
+        console.log('We did a retweet error: ', error);
       }
+      console.log('We did a Tweet: ', JSON.stringify(tweet) + '\n' + response);
     });
 
     return Date.now();
   };
+
+  follow = (screen_name) => {
+    client.post('friendships/create.json?screen_name=' + screen_name + '&follow=true', (error, tweet, response) => {
+      if(error) {
+        console.log('We did a follow error: ', error);
+      }
+      console.log('We did a follow too!');
+    });
+  }
 
   saveTweet = (tweet) => {
     const sweepstakeData = {
@@ -43,13 +56,36 @@ module.exports = function(Sweepstake) {
   };
 
   Sweepstake.streamSweepStakes = function(cb) {
-    var stream = client.stream('statuses/filter', {track: 'retweet to win'});
+    const queryStrings = [
+      'retweet to win',
+      'follow to win',
+      'retweet to enter',
+      'follow to enter',
+      'RT to enter',
+      'RT to win'
+    ]
+    var stream = client.stream('statuses/filter', {track: queryStrings.join(',')});
     var lastRetweetTimestamp = Date.now();
 
     stream.on('data', (tweet) => {
+      if(tweet.text === undefined) {
+        console.log('tweet.text undefined');
+        return 'UNDEFINED';
+      }
+
       if(tweet.hasOwnProperty('retweeted_status') || tweet.hasOwnProperty('quoted_status') || (tweet.hasOwnProperty('possibly_sensitive') && tweet.possibly_sensitive === true)) {
         console.log('Nope');
         return 'Nope';
+      }
+
+      for (var i = 0; i < queryStrings.length; i++) {
+        if(tweet.text.includes(queryStrings[i])) {
+          break;
+        }
+        if(i === queryStrings.length - 1) {
+          console.log('This tweet aint good enough: ', tweet.text);
+          return 'This tweet aint good enough';
+        }
       }
       // console.log('\n\nNew Tweet From: ', tweet.user.screen_name + '\n' + tweet.text);
       // console.log('\nDate', tweet.created_at);
@@ -59,7 +95,10 @@ module.exports = function(Sweepstake) {
         return 'Badword Alert!';
       }
 
-      lastRetweetTimestamp = retweet(tweet.id_str, lastRetweetTimestamp);
+      if(throttle(lastRetweetTimestamp)) return 'Throttled!';
+
+      lastRetweetTimestamp = retweet(tweet.id_str);
+      follow(tweet.user.screen_name);
       saveTweet(tweet);
     });
 
