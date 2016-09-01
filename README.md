@@ -12,7 +12,7 @@ A Twitter Bot For Subscribing to Sweepstakes
 - [x] Throttle retweeting
 - [x] Save sweepstakes tweets in db
 - [ ] Refine search query
-- [ ] Follow accounts that post sweepstakes
+- [x] Follow accounts that post sweepstakes
 - [ ] Frontend displaying analytics
 - [ ] D3 data visualization
 
