@@ -56,14 +56,27 @@ module.exports = function(Sweepstake) {
   };
 
   Sweepstake.streamSweepStakes = function(cb) {
+    // const queryStrings = [
+    //   'retweet to win',
+    //   'follow to win',
+    //   'retweet to enter',
+    //   'follow to enter',
+    //   'RT to enter',
+    //   'RT to win'
+    // ]
     const queryStrings = [
-      'retweet to win',
-      'follow to win',
-      'retweet to enter',
-      'follow to enter',
-      'RT to enter',
-      'RT to win'
+      'cheetos',
+      'chester the cheetah',
+      'cheetos!',
+      'Cheetos',
+      'CHEETOS!',
+      '#cheetos',
+      'cheetos.',
+      '#cheetos.',
+      'cheetahs',
+      '#cheetahs'
     ]
+
     var stream = client.stream('statuses/filter', {track: queryStrings.join(',')});
     var lastRetweetTimestamp = Date.now();
 
@@ -87,8 +100,6 @@ module.exports = function(Sweepstake) {
           return 'This tweet aint good enough';
         }
       }
-      // console.log('\n\nNew Tweet From: ', tweet.user.screen_name + '\n' + tweet.text);
-      // console.log('\nDate', tweet.created_at);
 
       if(tweet.text.toLowerCase().search(badwordList.regex) !== -1) {
         console.log('Fugetaboutit', tweet.text);
@@ -97,8 +108,8 @@ module.exports = function(Sweepstake) {
 
       if(throttle(lastRetweetTimestamp)) return 'Throttled!';
 
-      lastRetweetTimestamp = retweet(tweet.id_str);
-      follow(tweet.user.screen_name);
+      //lastRetweetTimestamp = retweet(tweet.id_str);
+      //follow(tweet.user.screen_name);
       saveTweet(tweet);
     });
 
