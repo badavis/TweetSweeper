@@ -6,7 +6,7 @@ TweetSweeper uses the Twitter API to stream in data and is built using Node.js, 
 
 ## Feature Roadmap:
 
-Project currently in progress.
+We are constantly working to fine tune and optimize our search queries. New features are in the works, and TweetSweeper now works with our companion project TweetStream which visualizes TweetStream.
 
 - [x] Connect to tweet stream
 - [x] Filter incoming tweets that include string 'Retweet to win'
@@ -17,8 +17,7 @@ Project currently in progress.
 - [x] Save sweepstakes tweets in db
 - [x] Refine search query
 - [x] Follow accounts that post sweepstakes
-- [ ] Frontend displaying analytics
-- [ ] D3 data visualization
+
 
 
 Authors -- Ben Davis & Sam Heinz
