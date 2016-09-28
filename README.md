@@ -1,8 +1,12 @@
 # TweetSweeper
 
-A Twitter Bot For Subscribing to Sweepstakes
+A Twitter Bot For Subscribing to Sweepstakes. Allows the account to follow, subscribe, and like tweets in order to enter contests that match its criteria such as "like to enter and win".
+
+TweetSweeper uses the Twitter API to stream in data and is built using Node.js, Javascript ES6, and MongoDB.
 
 ## Feature Roadmap:
+
+Project currently in progress.
 
 - [x] Connect to tweet stream
 - [x] Filter incoming tweets that include string 'Retweet to win'
@@ -11,7 +15,7 @@ A Twitter Bot For Subscribing to Sweepstakes
 - [x] Ignore tweets with nsfw content
 - [x] Throttle retweeting
 - [x] Save sweepstakes tweets in db
-- [ ] Refine search query
+- [x] Refine search query
 - [x] Follow accounts that post sweepstakes
 - [ ] Frontend displaying analytics
 - [ ] D3 data visualization
